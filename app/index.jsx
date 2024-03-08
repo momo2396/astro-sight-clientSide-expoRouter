@@ -47,7 +47,7 @@ const Index = () => {
         labelStyle={{ textAlign: "center", fontSize: 20 }}
         onPress={() =>
           router.push({
-            pathname: "/test",
+            pathname: "/otherScreens/register",
           })
         }
       >
