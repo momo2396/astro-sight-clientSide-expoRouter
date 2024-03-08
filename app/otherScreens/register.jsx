@@ -1,9 +1,11 @@
 import { View, ImageBackground, SafeAreaView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import regBG from "../../assets/images/standing/blue.png";
-import { Button, MD2Colors, TextInput } from "react-native-paper";
+import { Button, MD2Colors } from "react-native-paper";
 import { Text } from "react-native-paper";
 import RegTextInput from "../../components/textInputs/RegTextInput";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 const Register = () => {
   const [email, setEmail] = useState("");
   const [user, setUser] = useState("");
@@ -11,12 +13,28 @@ const Register = () => {
   const [show, setShow] = useState(false);
   const [birthDate, setBirthDate] = useState(null);
   const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [showPass, setShowPass] = useState(true);
+  const [showConPass, setShowConPass] = useState(true);
+  const [rPIcon, setRPIcon] = useState("");
+  const [rCPIcon, setRCPIcon] = useState("");
+  const [pass, setPass] = useState("");
+  const [con, setCon] = useState("");
+  useLayoutEffect(() => {
+    if (showPass) setRPIcon("eye");
+    else setRPIcon("eye-off");
+  }, [showPass]);
+  useLayoutEffect(() => {
+    if (showConPass) setRCPIcon("eye");
+    else setRCPIcon("eye-off");
+  }, [showConPass]);
   const handleDatePicker = (event, selectedDate) => {
     setShow(false);
     if (event.type === "set") {
-      const currentDate = selectedDate;
-      setDate(currentDate);
-      setBirthDate(currentDate.toString().split(" ").slice(1, 4).join("-"));
+      setDate(selectedDate);
+      setBirthDate(
+        selectedDate?.toString()?.split(" ")?.slice(1, 4)?.join("-")
+      );
     } else if (event.type === "dismissed") {
       setBirthDate(null);
     }
@@ -50,7 +68,7 @@ const Register = () => {
               borderColor: MD2Colors.white,
             }}
             textColor={MD2Colors.white}
-            icon="arrow-right"
+            leftIcon="arrow-right"
             mode="outlined"
             buttonColor={MD2Colors.purple200}
             contentStyle={{ flexDirection: "row-reverse" }}
@@ -118,29 +136,31 @@ const Register = () => {
           }}
         >
           <RegTextInput
-            icon="face-man"
+            leftIcon="face-man"
             label="Full Name"
             text={name}
             setText={setName}
           />
           <RegTextInput
-            icon="account"
+            leftIcon="account"
             label="User Name"
             text={user}
             setText={setUser}
           />
           <RegTextInput
-            icon="email-outline"
+            leftIcon="email-outline"
             label="Email"
             text={email}
             setText={setEmail}
           />
           <RegTextInput
-            icon="calendar-month-outline"
+            leftIcon="calendar-month-outline"
+            rightIcon="plus-thick"
             label="Date of Birth"
             text={birthDate}
             setText={setBirthDate}
             setShow={setShow}
+            dateP
           />
           {show && (
             <DateTimePicker
@@ -151,6 +171,26 @@ const Register = () => {
               onChange={handleDatePicker}
             />
           )}
+          <RegTextInput
+            leftIcon="form-textbox-password"
+            rightIcon={rPIcon}
+            label="Password"
+            text={pass}
+            passShow={showPass}
+            setText={setPass}
+            setShow={setShowPass}
+            pw
+          />
+          <RegTextInput
+            leftIcon="form-textbox-password"
+            rightIcon={rCPIcon}
+            label="Confirm Password"
+            text={con}
+            passShow={showConPass}
+            setText={setCon}
+            setShow={setShowConPass}
+            pw
+          />
         </View>
       </SafeAreaView>
     </ImageBackground>
