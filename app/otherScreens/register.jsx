@@ -1,14 +1,16 @@
 import { View, ImageBackground, SafeAreaView } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import regBG from "../../assets/images/standing/blue.png";
-import { Button, MD2Colors } from "react-native-paper";
+import { Avatar, Button, MD2Colors } from "react-native-paper";
 import { Text } from "react-native-paper";
 import RegTextInput from "../../components/textInputs/RegTextInput";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 const Register = () => {
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState("");
+  const [userName, setUserName] = useState("");
   const [name, setName] = useState("");
   const [show, setShow] = useState(false);
   const [birthDate, setBirthDate] = useState(null);
@@ -20,6 +22,8 @@ const Register = () => {
   const [rCPIcon, setRCPIcon] = useState("");
   const [pass, setPass] = useState("");
   const [con, setCon] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
   useLayoutEffect(() => {
     if (showPass) setRPIcon("eye");
     else setRPIcon("eye-off");
@@ -39,6 +43,22 @@ const Register = () => {
       setBirthDate(null);
     }
   };
+  const PickImage = async () => {
+    setSelectedImage("");
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setPreviewImage(result.assets[0].uri);
+      const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      setSelectedImage(base64);
+    }
+  };
   return (
     <ImageBackground
       source={regBG}
@@ -56,50 +76,36 @@ const Register = () => {
         <View
           style={{
             flexDirection: "row",
-            gap: 30,
-            alignItems: "center",
+            gap: 10,
+            alignItems: "baseline",
             justifyContent: "center",
+            alignContent: "center",
           }}
         >
-          {/* <Button
-            style={{
-              padding: 10,
-              marginTop: 20,
-              borderColor: MD2Colors.white,
-            }}
-            textColor={MD2Colors.white}
-            leftIcon="arrow-right"
-            mode="outlined"
-            buttonColor={MD2Colors.purple200}
-            contentStyle={{ flexDirection: "row-reverse" }}
-            labelStyle={{ textAlign: "center", fontSize: 20 }}
-            // onPress={() =>
-            //   router.push({
-            //     pathname: "/otherScreens/register",
-            //   })
-            // }
-          >
-            Sign Up
-          </Button> */}
-          <Text style={{ color: MD2Colors.purple200, fontSize: 15 }}>
+          <Text style={{ color: MD2Colors.purple200, fontSize: 20 }}>
             Old Member?
           </Text>
           <Button
             style={{
-              padding: 5,
               marginTop: 20,
               borderColor: MD2Colors.purple200,
             }}
-            textColor={MD2Colors.purple200}
+            buttonColor={MD2Colors.purple200}
             icon="arrow-right"
-            mode="outlined"
+            mode="contained"
             contentStyle={{ flexDirection: "row-reverse" }}
-            labelStyle={{ textAlign: "center", fontSize: 15 }}
-            // onPress={() =>
-            //   router.push({
-            //     pathname: "/otherScreens/register",
-            //   })
-            // }
+            labelStyle={{ textAlign: "center" }}
+            onPress={() =>
+              console.log(
+                name,
+                email,
+                pass,
+                con,
+                birthDate,
+                userName,
+                selectedImage.slice(0, 10)
+              )
+            }
           >
             Sign In
           </Button>
@@ -108,13 +114,12 @@ const Register = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginTop: 10,
+            marginTop: 30,
           }}
         >
           <Text
             style={{
               color: MD2Colors.purple200,
-
               fontSize: 40,
             }}
           >
@@ -124,17 +129,37 @@ const Register = () => {
         <View
           style={{
             flex: 1,
-            marginTop: 20,
+            marginTop: 30,
             flexDirection: "column",
             gap: 10,
             backgroundColor: "black",
             opacity: 0.8,
             alignItems: "center",
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingTop: 10,
+            paddingLeft: 20,
+            paddingRight: 20,
+            paddingTop: 20,
           }}
         >
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              gap: 20,
+            }}
+          >
+            {previewImage && (
+              <Avatar.Image size={130} source={{ uri: previewImage }} />
+            )}
+            <Button
+              icon="camera"
+              mode="contained"
+              onPress={PickImage}
+              buttonColor={MD2Colors.purple200}
+            >
+              {previewImage ? "Edit Photo" : "Select Photo"}
+            </Button>
+          </View>
           <RegTextInput
             leftIcon="face-man"
             label="Full Name"
@@ -144,8 +169,8 @@ const Register = () => {
           <RegTextInput
             leftIcon="account"
             label="User Name"
-            text={user}
-            setText={setUser}
+            text={userName}
+            setText={setUserName}
           />
           <RegTextInput
             leftIcon="email-outline"

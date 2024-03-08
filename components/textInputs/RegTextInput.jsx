@@ -8,7 +8,7 @@ const RegTextInput = ({
   leftIcon,
   rightIcon,
   label,
-  setShow,
+  setShow = false,
   dateP = false,
   pw = false,
   passShow = false,
