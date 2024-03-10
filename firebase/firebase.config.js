@@ -17,3 +17,5 @@ const auth = initializeAuth(app, {
 
 // export default app;
 export default auth;
+
+// completed
