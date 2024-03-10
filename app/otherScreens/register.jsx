@@ -1,16 +1,33 @@
-import { View, ImageBackground, SafeAreaView } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  View,
+  ImageBackground,
+  SafeAreaView,
+  ToastAndroid,
+} from "react-native";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import regBG from "../../assets/images/standing/blue.png";
-import { Avatar, Button, MD2Colors } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  MD2Colors,
+  TextInput,
+} from "react-native-paper";
 import { Text } from "react-native-paper";
 import RegTextInput from "../../components/textInputs/RegTextInput";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import useGetData, { backendURL } from "../../routes/useGetData";
+import { UserContext } from "../../components/AuthProviders";
+import { uploadImage } from "../functions/uploadImage";
+import { router } from "expo-router";
 
 const Register = () => {
+  const { data, isLoading, refetch } = useGetData("/users/user-names");
   const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  let [userName, setUserName] = useState("");
+  let [userNames, setUserNames] = useState("");
   const [name, setName] = useState("");
   const [show, setShow] = useState(false);
   const [birthDate, setBirthDate] = useState(null);
@@ -20,14 +37,44 @@ const Register = () => {
   const [showConPass, setShowConPass] = useState(true);
   const [rPIcon, setRPIcon] = useState("");
   const [rCPIcon, setRCPIcon] = useState("");
+  const [rUIcon, setRUIcon] = useState("");
+  const [iColor, setIColor] = useState("");
   const [pass, setPass] = useState("");
   const [con, setCon] = useState("");
+  const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  let [err, setErr] = useState("");
   const [previewImage, setPreviewImage] = useState("");
+  let [available, setAvailable] = useState("");
+  const { registerUser, logoutUser, sendVerification } =
+    useContext(UserContext);
+
+  useLayoutEffect(() => {
+    let names = {};
+    if (data?.data) data?.data?.forEach((u) => (names[u.toLowerCase()] = true));
+    setUserNames(names);
+    console.log(names);
+  }, [data?.data]);
+
   useLayoutEffect(() => {
     if (showPass) setRPIcon("eye");
     else setRPIcon("eye-off");
   }, [showPass]);
+
+  useLayoutEffect(() => {
+    if (available) {
+      if (available == "taken") {
+        setRUIcon("exclamation-thick");
+        setIColor("red");
+      } else if (available == "available") {
+        setRUIcon("check-bold");
+        setIColor("green");
+      }
+    } else {
+      setRUIcon("");
+      setIColor("");
+    }
+  }, [available]);
   useLayoutEffect(() => {
     if (showConPass) setRCPIcon("eye");
     else setRCPIcon("eye-off");
@@ -58,6 +105,101 @@ const Register = () => {
       });
       setSelectedImage(base64);
     }
+  };
+  const handleUserName = (text) => {
+    setUserName(text?.nativeEvent?.text);
+    if (userNames[text?.nativeEvent?.text.toLowerCase()]) setAvailable("taken");
+    else if (text?.nativeEvent?.text) setAvailable("available");
+    else setAvailable("");
+  };
+  const handleSignUp = async () => {
+    let formDate = birthDate ? date : null;
+    let formName = name;
+    let formUserName = userName;
+    let formEmail = email;
+    let formPass = pass;
+    let formCon = con;
+    let formImage = selectedImage;
+    if (
+      !formName ||
+      !formDate ||
+      !formUserName ||
+      !formEmail ||
+      !formPass ||
+      !formCon ||
+      !formImage
+    ) {
+      setErr("Please enter all valid information");
+      return;
+    }
+    if (available === "taken") return setErr("Username not available");
+    if (pass !== con)
+      return setErr("Password and Confirm Password are not Same.");
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formEmail)) {
+      setErr("Enter a valid email address");
+      return;
+    }
+
+    setLoading(true);
+    formImage = await uploadImage(`data:image/jpeg;base64,${formImage}`);
+    if (!formImage) {
+      setLoading(false);
+      return setErr("Photo upload failed, try again");
+    }
+    setErr("");
+    const userInfo = {
+      name: formName,
+      email: formEmail,
+      userName: formUserName,
+      rating: 0,
+      birthDate: formDate,
+      password: formPass,
+      photoURL: formImage,
+      role: "user",
+    };
+    registerUser(email, pass)
+      .then((userCredential) => {
+        sendVerification();
+        mongoDBUserEntry(userInfo);
+      })
+      .catch((error) => {
+        setErr(
+          error?.code?.split("/")[1]?.split("-")?.join(" ")?.toUpperCase()
+        );
+        setLoading(false);
+        return;
+      });
+  };
+
+  let mongoDBUserEntry = (userInfo) => {
+    fetch(backendURL + "/users/insert-user", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(userInfo),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setLoading(false);
+        logoutUser();
+
+        ToastAndroid.show(
+          "Registration Successful, Please Login",
+          ToastAndroid.SHORT
+        );
+      })
+      .catch((error) => {
+        console.log(
+          // error?.code?.split("/")[1]?.split("-")?.join(" ")?.toUpperCase()
+          "error: ",
+          error
+        );
+        // setLoading(false);
+        return;
+      });
   };
   return (
     <ImageBackground
@@ -96,15 +238,9 @@ const Register = () => {
             contentStyle={{ flexDirection: "row-reverse" }}
             labelStyle={{ textAlign: "center" }}
             onPress={() =>
-              console.log(
-                name,
-                email,
-                pass,
-                con,
-                birthDate,
-                userName,
-                selectedImage.slice(0, 10)
-              )
+              router.push({
+                pathname: "/otherScreens/login",
+              })
             }
           >
             Sign In
@@ -166,12 +302,24 @@ const Register = () => {
             text={name}
             setText={setName}
           />
-          <RegTextInput
-            leftIcon="account"
+          <TextInput
             label="User Name"
-            text={userName}
-            setText={setUserName}
+            leftIcon="account"
+            rightIcon={rUIcon}
+            mode="flat"
+            value={userName}
+            onChange={(text) => handleUserName(text)}
+            onBlur={() =>
+              setAvailable && setAvailable((x) => (x === "available" ? "" : x))
+            }
+            underlineColor={MD2Colors.purple200}
+            activeUnderlineColor={MD2Colors.purple600}
+            style={{ width: "100%" }}
+            textColor={MD2Colors.grey800}
+            left={<TextInput.Icon icon="account" disabled={true} />}
+            right={<TextInput.Icon icon={rUIcon} color={iColor} />}
           />
+
           <RegTextInput
             leftIcon="email-outline"
             label="Email"
@@ -216,6 +364,46 @@ const Register = () => {
             setShow={setShowConPass}
             pw
           />
+          {err && (
+            <Text
+              style={{
+                color: MD2Colors.red500,
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 5,
+                marginTop: 5,
+                fontWeight: "400",
+              }}
+            >
+              {err}
+            </Text>
+          )}
+          <View style={{ alignItems: "center", gap: 5 }}>
+            {loading ? (
+              <ActivityIndicator
+                animating={true}
+                size={50}
+                color={MD2Colors.red800}
+              />
+            ) : (
+              <View style={{ width: "100%" }}>
+                <Button
+                  icon="arrow-right"
+                  mode="outlined"
+                  contentStyle={{ flexDirection: "row-reverse" }}
+                  // disabled={err !== ""}
+                  textColor={MD2Colors.purple200}
+                  onPress={handleSignUp}
+                  style={{
+                    borderColor: MD2Colors.purple200,
+                    borderCurve: "circular",
+                  }}
+                >
+                  Go
+                </Button>
+              </View>
+            )}
+          </View>
         </View>
       </SafeAreaView>
     </ImageBackground>

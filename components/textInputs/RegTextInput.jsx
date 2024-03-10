@@ -1,7 +1,5 @@
 import React from "react";
 import { MD2Colors, TextInput } from "react-native-paper";
-import { Text, TouchableOpacity } from "react-native";
-
 const RegTextInput = ({
   text,
   setText,
