@@ -269,7 +269,7 @@ const Register = () => {
             flexDirection: "column",
             gap: 10,
             backgroundColor: "black",
-            opacity: 0.8,
+            opacity: 0.7,
             alignItems: "center",
             paddingLeft: 20,
             paddingRight: 20,
