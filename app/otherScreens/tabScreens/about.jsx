@@ -39,5 +39,3 @@ const About = () => {
 };
 
 export default About;
-
-// map
