@@ -373,3 +373,4 @@ const ImageScreen = () => {
 export default ImageScreen;
 
 //ml
+//report generation
