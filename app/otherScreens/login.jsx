@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ToastAndroid } from "react-native";
+import { View, Text, ToastAndroid } from "react-native";
 import React, { useContext, useLayoutEffect, useState } from "react";
 import logBG from "../../assets/images/dancing/blue.png";
 import { ImageBackground } from "react-native";
@@ -10,7 +10,7 @@ import { UserContext } from "../../components/AuthProviders";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { backendURL } from "../../routes/useGetData";
 const Login = () => {
-  let { loginUser, setUser, sendVerification, remember, setRemember } =
+  let { loginUser, setUser, sendVerification, remember, setRemember, user } =
     useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -58,9 +58,8 @@ const Login = () => {
           console.log(data);
           if (data) {
             setUser(data);
-            // navigation.dispatch(StackActions.replace("AuthorizedScreen"));
             router.replace({
-              pathname: "/otherScreens/profile",
+              pathname: "/otherScreens/authorized_screen",
             });
             await AsyncStorage.setItem("user", JSON.stringify(data));
             setLoading(false);
@@ -197,9 +196,11 @@ const Login = () => {
             >
               <View style={{ borderWidth: 2, borderColor: MD2Colors.green400 }}>
                 <View
-                  style={`margin: 0.5, padding:2 ${
-                    remember ? "bg-green-600" : ""
-                  }`}
+                  style={{
+                    margin: 0.5,
+                    padding: 2,
+                    backgroundColor: remember ? MD2Colors.green600 : "",
+                  }}
                 ></View>
               </View>
             </Button>
@@ -210,7 +211,7 @@ const Login = () => {
               style={{
                 justifyContent: "center",
                 color: MD2Colors.red600,
-                fontSize: 30,
+                fontSize: 20,
               }}
             >
               {err}
@@ -228,8 +229,7 @@ const Login = () => {
                 <Button
                   icon="arrow-right"
                   mode="outlined"
-                  contentStyle={{ flexDirection: "row-reverse" }}
-                  // disabled={err !== ""}
+                  //   contentStyle={{ flexDirection: "row-reverse" }}
                   textColor={MD2Colors.purple200}
                   onPress={handleSignIn}
                   style={{
@@ -244,12 +244,9 @@ const Login = () => {
             {verifyBtn && (
               <View style={{ width: "100%" }}>
                 <Button
-                  icon="arrow-right"
                   mode="outlined"
-                  contentStyle={{ flexDirection: "row-reverse" }}
-                  // disabled={err !== ""}
                   textColor={MD2Colors.purple200}
-                  onPress={handleSignIn}
+                  onPress={verifyHandler}
                   style={{
                     borderColor: MD2Colors.purple200,
                     borderCurve: "circular",

@@ -17,13 +17,11 @@ import {
 } from "firebase/auth";
 
 import auth from "../firebase/firebase.config";
-import { useNavigation } from "@react-navigation/native";
 import { ToastAndroid } from "react-native";
 import { backendURL } from "../routes/useGetData";
 import { router } from "expo-router";
 export const UserContext = createContext(null);
 const AuthProviders = ({ children }) => {
-  let navigation = useNavigation();
   let [user, setUser] = useState(null);
   let [loading, setLoading] = useState(true);
   const [remember, setRemember] = useState(false);

@@ -1,11 +1,24 @@
 import { View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Confirm from "../components/dialogs/Confirm";
 import { ActivityIndicator, Button, MD2Colors, Text } from "react-native-paper";
 import { Image } from "expo-image";
 import welcome from "../assets/images/welcome_logo_2(BGR).png";
 import { router } from "expo-router";
+import { UserContext } from "../components/AuthProviders";
 const Index = () => {
+  const { user } = useContext(UserContext);
+  const handleGetStarted = () => {
+    if (user) {
+      router.replace({
+        pathname: "/otherScreens/authorized_screen",
+      });
+    } else {
+      router.replace({
+        pathname: "/otherScreens/register",
+      });
+    }
+  };
   return (
     <View
       style={{
@@ -15,11 +28,6 @@ const Index = () => {
         backgroundColor: "black",
       }}
     >
-      {/* <ActivityIndicator
-        animating={true}
-        color={MD2Colors.red300}
-        size="large"
-      /> */}
       <Image
         style={{ width: "75%", height: 300, paddingLeft: 40 }}
         source={welcome}
@@ -45,11 +53,7 @@ const Index = () => {
         mode="outlined"
         contentStyle={{ flexDirection: "row-reverse" }}
         labelStyle={{ textAlign: "center", fontSize: 20 }}
-        onPress={() =>
-          router.push({
-            pathname: "/otherScreens/register",
-          })
-        }
+        onPress={handleGetStarted}
       >
         Get Started
       </Button>
