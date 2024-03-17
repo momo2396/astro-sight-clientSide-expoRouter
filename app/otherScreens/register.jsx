@@ -48,7 +48,6 @@ const Register = () => {
   let [available, setAvailable] = useState("");
   const { registerUser, logoutUser, sendVerification } =
     useContext(UserContext);
-
   useLayoutEffect(() => {
     let names = {};
     if (data?.data) data?.data?.forEach((u) => (names[u.toLowerCase()] = true));
@@ -108,7 +107,8 @@ const Register = () => {
   };
   const handleUserName = (text) => {
     setUserName(text?.nativeEvent?.text);
-    if (userNames[text?.nativeEvent?.text.toLowerCase()]) setAvailable("taken");
+    if (userNames[text?.nativeEvent?.text?.toLowerCase()])
+      setAvailable("taken");
     else if (text?.nativeEvent?.text) setAvailable("available");
     else setAvailable("");
   };
@@ -193,11 +193,9 @@ const Register = () => {
       })
       .catch((error) => {
         console.log(
-          // error?.code?.split("/")[1]?.split("-")?.join(" ")?.toUpperCase()
-          "error: ",
-          error
+          error?.code?.split("/")[1]?.split("-")?.join(" ")?.toUpperCase()
         );
-        // setLoading(false);
+        setLoading(false);
         return;
       });
   };

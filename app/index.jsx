@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import React, { useContext, useLayoutEffect, useRef } from "react";
 import Confirm from "../components/dialogs/Confirm";
-import { ActivityIndicator, Button, MD2Colors, Text } from "react-native-paper";
+import { Button, MD2Colors, Text } from "react-native-paper";
 import { Image } from "expo-image";
 import welcome from "../assets/images/welcome_logo_2(BGR).png";
 import { router } from "expo-router";
@@ -11,7 +11,6 @@ const Index = () => {
   let btnRef = useRef(null);
   let welcomeRef = useRef(null);
   let astroRef = useRef(null);
-  let imageRef = useRef(null);
   const { user } = useContext(UserContext);
 
   useLayoutEffect(() => {
@@ -49,16 +48,6 @@ const Index = () => {
         ease: Elastic.easeOut,
         stagger: { amount: 0.3 },
       });
-      // gsap.set(imageRef, {
-      //   style: { left: 0, top: 0, opacity: 0 },
-      //   transform: { scale: 0.001 },
-      // });
-      // gsap.to(imageRef, {
-      //   duration: 7,
-      //   style: { left: 0, top: 0, opacity: 1 },
-      //   transform: { scale: 1 },
-      //   ease: Back.easeInOut,
-      // });
     };
     func();
   }, []);
@@ -83,7 +72,6 @@ const Index = () => {
       }}
     >
       <Image
-        // ref={(r) => (imageRef = r)}
         style={{ width: "75%", height: 300, paddingLeft: 40 }}
         source={welcome}
         contentFit="cover"
