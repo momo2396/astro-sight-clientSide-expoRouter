@@ -43,10 +43,10 @@ const Map = () => {
         long: loc.coords.longitude,
       });
       setLoading(false);
-      console.log({
-        lat: loc?.coords?.latitude,
-        long: loc.coords.longitude,
-      });
+      // console.log({
+      //   lat: loc?.coords?.latitude,
+      //   long: loc.coords.longitude,
+      // });
     })();
   }, []);
   return (

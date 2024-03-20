@@ -6,7 +6,7 @@ const useGetData = (url) => {
     queryFn: async () => {
       const res = await fetch(backendURL + url);
       const resData = await res.json();
-      console.log(resData);
+      // console.log(resData);
       return resData;
     },
   });

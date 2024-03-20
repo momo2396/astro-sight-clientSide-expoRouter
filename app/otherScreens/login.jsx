@@ -55,7 +55,7 @@ const Login = () => {
             backendURL + `/users/single-user?email=${res?.user?.email}`
           );
           let data = await res2.json();
-          console.log(data);
+          // console.log(data);
           if (data) {
             setUser(data);
             router.replace({
@@ -66,8 +66,7 @@ const Login = () => {
           } else {
             setUser(null);
             setLoading(false);
-            setErr("User not found with this email");
-            console.log("Not found");
+            // console.log("Not found");
             ToastAndroid.show({ err }, ToastAndroid.SHORT);
             return;
           }

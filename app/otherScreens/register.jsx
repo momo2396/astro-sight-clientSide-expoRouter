@@ -50,9 +50,10 @@ const Register = () => {
     useContext(UserContext);
   useLayoutEffect(() => {
     let names = {};
-    if (data?.data) data?.data?.forEach((u) => (names[u.toLowerCase()] = true));
+    if (data?.data)
+      data?.data?.forEach((u) => (names[u?.toLowerCase()] = true));
     setUserNames(names);
-    console.log(names);
+    // console.log(names);
   }, [data?.data]);
 
   useLayoutEffect(() => {

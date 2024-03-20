@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Button, Dialog, Portal } from "react-native-paper";
 
-const Confirm = ({ title, des, visible, setVisible, setConfirm }) => {
+const Confirm = ({ title, visible, setVisible, setConfirm }) => {
   const hideDialog = () => setVisible(false);
   const cancelDialog = () => {
     setConfirm(false);
@@ -21,9 +21,9 @@ const Confirm = ({ title, des, visible, setVisible, setConfirm }) => {
       >
         <Dialog.Icon icon="alert" />
         <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Content>
+        {/* <Dialog.Content>
           <Text variant="bodyMedium">{des}</Text>
-        </Dialog.Content>
+        </Dialog.Content> */}
         <Dialog.Actions>
           <Button onPress={cancelDialog}>Cancel</Button>
           <Button onPress={doneDialog}>Ok</Button>

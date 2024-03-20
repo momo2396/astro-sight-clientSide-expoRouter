@@ -27,7 +27,7 @@ const AuthProviders = ({ children }) => {
   const [remember, setRemember] = useState(false);
   useLayoutEffect(() => {
     let funcUserCheck = async (localUser) => {
-      console.log("local", localUser);
+      // console.log("local", localUser);
       if (localUser) {
         localUser = JSON.parse(localUser);
         setUser(localUser);
@@ -42,7 +42,7 @@ const AuthProviders = ({ children }) => {
               );
               let data = await res.json();
               if (data) {
-                console.log("data: ", data);
+                // console.log("data: ", data);
                 setUser(data);
                 setLoading(false);
                 await AsyncStorage.setItem("user", JSON.stringify(data));

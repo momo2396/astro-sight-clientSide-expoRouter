@@ -23,45 +23,45 @@ const ImageScreen = () => {
   const [pred, setPred] = useState([]);
   const [err, setErr] = useState(null);
   const html = `<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  </head>
-  <body style="text-align: center;">
-    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-      Prediction Result
-    </h1>
-    <img
-      src="${imageUri}"
-      style="width: 30vw; margin-horizontal: auto" />
-    <div style="">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
-            <p>${pred[0]?.class?.toUpperCase()}</p>
-            <p>${(pred[0]?.score * 100).toFixed(2)}%</p>
-        </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
-            <p>${pred[1]?.class?.toUpperCase()}</p>
-            <p>${(pred[1]?.score * 100).toFixed(2)}%</p>
-        </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
-            <p>${pred[2]?.class?.toUpperCase()}</p>
-            <p>${(pred[2]?.score * 100).toFixed(2)}%</p>
-        </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
-            <p>${pred[3]?.class?.toUpperCase()}</p>
-            <p>${(pred[3]?.score * 100).toFixed(2)}%</p>
-        </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
-            <p>${pred[4]?.class?.toUpperCase()}</p>
-            <p>${(pred[4]?.score * 100).toFixed(2)}%</p>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
-        <p>${pred[5]?.class?.toUpperCase()}</p>
-        <p>${(pred[5]?.score * 100).toFixed(2)}%</p>
-    </div>
-    </div>
-  </body>
-</html>
-`;
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    </head>
+    <body style="text-align: center;">
+      <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
+        Prediction Result
+      </h1>
+      <img
+        src="${imageUri}"
+        style="width: 30vw; margin-horizontal: auto" />
+      <div style="">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
+              <p>${pred[0]?.class?.toUpperCase()}</p>
+              <p>${(pred[0]?.score * 100).toFixed(2)}%</p>
+          </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
+              <p>${pred[1]?.class?.toUpperCase()}</p>
+              <p>${(pred[1]?.score * 100).toFixed(2)}%</p>
+          </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
+              <p>${pred[2]?.class?.toUpperCase()}</p>
+              <p>${(pred[2]?.score * 100).toFixed(2)}%</p>
+          </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
+              <p>${pred[3]?.class?.toUpperCase()}</p>
+              <p>${(pred[3]?.score * 100).toFixed(2)}%</p>
+          </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
+              <p>${pred[4]?.class?.toUpperCase()}</p>
+              <p>${(pred[4]?.score * 100).toFixed(2)}%</p>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 5px">
+          <p>${pred[5]?.class?.toUpperCase()}</p>
+          <p>${(pred[5]?.score * 100).toFixed(2)}%</p>
+      </div>
+      </div>
+    </body>
+  </html>
+  `;
 
   const printToFile = async () => {
     setDownLoad(true);
@@ -113,7 +113,6 @@ const ImageScreen = () => {
       });
 
       let data = await res.json();
-      // console.log(data);
       if (data.status !== 500) setPred(data);
       else setErr("Something went wrong");
       setLoad(false);

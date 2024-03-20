@@ -8,7 +8,7 @@ import useGetData, { backendURL } from "../../../routes/useGetData";
 const About = () => {
   const { user, setUser } = useContext(UserContext);
   const { data, refetch } = useGetData("/users/average-rating");
-  let [rating, setRating] = useState(user?.rating || 0);
+  let [rating, setRating] = useState(user?.data?.rating || 0);
   const handleRate = (rate) => {
     if (rate === rating) {
       setRating(0);
@@ -26,7 +26,7 @@ const About = () => {
         rating: rate,
       };
     });
-    fetch(`${backendURL}/users/update-ratings?email=${user?.email}`, {
+    fetch(`${backendURL}/users/update-ratings?email=${user?.data?.email}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
