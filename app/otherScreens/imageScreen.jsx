@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text, ImageBackground, ToastAndroid } from "react-native";
 import regBG from "../../assets/images/standing/blue.png";
 import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -91,7 +91,7 @@ const ImageScreen = () => {
       quality: 1,
     });
     setBtnLoad(false);
-    // console.log(result);
+    console.log("result:", result);
     if (!result.canceled) {
       setLoad(true);
       let imageUri = result.assets[0].uri;
@@ -103,6 +103,11 @@ const ImageScreen = () => {
         `data:image/jpeg;base64,${base64Image}`,
         300
       );
+      if (!formImage) {
+        setLoad(false);
+        setImage(null);
+        return ToastAndroid.SHORT("Image upload failed!");
+      }
       setImageUri(formImage);
       let res = await fetch(backendURL + "/classification", {
         method: "POST",
@@ -119,7 +124,7 @@ const ImageScreen = () => {
     }
   };
 
-  // console.log(image);
+  console.log("image: ", image);
   return (
     // <LinearGradient colors={["white", "lightgreen"]} className="flex-1">
     <ImageBackground

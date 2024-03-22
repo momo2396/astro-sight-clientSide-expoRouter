@@ -7,12 +7,7 @@ import {
   Image,
 } from "react-native";
 import React, { useContext, useLayoutEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Icon,
-  MD2Colors,
-  MD3Colors,
-} from "react-native-paper";
+import { ActivityIndicator, Icon, MD2Colors } from "react-native-paper";
 import { router } from "expo-router";
 import useGetData, { backendURL } from "../../../routes/useGetData";
 import { UserContext } from "../../../components/AuthProviders";
@@ -106,7 +101,7 @@ export function SinglePost({ item, index, color1, color2 }) {
     )
       .then((res) => res.json())
       .then(() => {
-        reactQuery.refetch();
+        postQuery?.refetch();
       });
   };
   const updateReact = (reaction) => {
@@ -126,14 +121,16 @@ export function SinglePost({ item, index, color1, color2 }) {
       });
   };
 
-  const handleSeeMore = () => {
-    router.push({
-      pathname: "/otherScreens/details",
-      params: item,
-    });
-  };
+  // const handleSeeMore = () => {
+  //   router.push({
+  //     pathname: "/otherScreens/details",
+  //     params: item,
+  //   });
+  // };
   return (
-    <Pressable onPress={handleSeeMore}>
+    <Pressable
+    // onPress={handleSeeMore}
+    >
       <View
         style={{
           borderWidth: 1,
