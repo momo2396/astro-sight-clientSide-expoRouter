@@ -124,7 +124,7 @@ const ImageScreen = () => {
     }
   };
 
-  console.log("image: ", image);
+  // console.log("image: ", image);
   return (
     // <LinearGradient colors={["white", "lightgreen"]} className="flex-1">
     <ImageBackground

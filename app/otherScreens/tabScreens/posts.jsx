@@ -121,20 +121,18 @@ export function SinglePost({ item, index, color1, color2 }) {
       });
   };
 
-  // const handleSeeMore = () => {
-  //   router.push({
-  //     pathname: "/otherScreens/details",
-  //     params: item,
-  //   });
-  // };
+  const handleSeeMore = () => {
+    router.push({
+      pathname: "/otherScreens/details",
+      params: item,
+    });
+  };
   return (
-    <Pressable
-    // onPress={handleSeeMore}
-    >
+    <Pressable onPress={handleSeeMore}>
       <View
         style={{
           borderWidth: 1,
-          borderRadius: 20,
+          borderRadius: 10,
           overflow: "hidden",
           borderColor: "white",
           marginBottom: 22,

@@ -112,7 +112,7 @@ const AuthorizedScreen = () => {
                 }}
               >
                 {tab === "Videos" && "Youtube Videos"}
-                {tab === "Posts" && "Posts"}
+                {tab === "Posts" && "Blogs"}
                 {tab === "About" && "About Us"}
               </Text>
               <View
